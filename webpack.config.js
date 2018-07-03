@@ -19,5 +19,10 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'bundle.js'
+  },
+  mode: "development",
+  devtool: "source-map",
+  devServer: {
+    contentBase: './build'
   }
 }
