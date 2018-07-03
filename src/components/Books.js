@@ -23,6 +23,7 @@ class Books extends Component {
 
     this.addBook = this.addBook.bind(this);
     this.handleBookInputChange = this.handleBookInputChange.bind(this);
+    this.deleteBook = this.deleteBook.bind(this);
   }
   addBook(){
   
@@ -44,18 +45,34 @@ class Books extends Component {
       newBook: event.target.value
     });
   }
+  deleteBook(bookId){
+    console.log(bookId);
+    if(bookId){
+      let books = this.state.books;
+      this.setState({
+        books: books.filter(function (item) {
+          return item.id!=bookId
+        })
+      });
+    }
+  }
   render() {
     let booksDisplay = [];
     this.state.books.forEach(book => {
       let bookDiv = 
         <div>
           <div style={{ float: "left", width: "20%" }}>{ book.id }</div>
-          <div>{ book.name }</div>
+          <div style={{ float: "left", width: "60%" }}>{book.name}</div>
+          <div style={{ float: "left", width: "20%" }}>
+            <input type="button" value="Delete" onClick={
+              () => this.deleteBook(book.id)
+            } />
+          </div>
         </div>;
       booksDisplay.push(bookDiv);
     });
     return (
-      <div>
+      <div className='main-div'>
         <h1>List of Books</h1>
         { booksDisplay }
         <div>
