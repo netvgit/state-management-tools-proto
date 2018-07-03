@@ -8,7 +8,7 @@ class Books extends Component {
   constructor() {
 
     super();
-
+    console.log('books');
     this.state = {
       newBook : '',
       books : BookStoreInstance.getBooks()
@@ -17,15 +17,25 @@ class Books extends Component {
     this.addBook = this.addBook.bind(this);
     this.handleBookInputChange = this.handleBookInputChange.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
+    this.displayBooks = this.displayBooks.bind(this);
   }
 
   componentDidMount(){
-    BookStoreInstance.on('change', () => {
-      this.setState({
-        newBook: '',
-        books: BookStoreInstance.getBooks()
-      });
-    })
+    
+    console.log('count of store listeners', BookStoreInstance.listenerCount('change'));
+    BookStoreInstance.on('change', this.displayBooks);
+  }
+
+  componentWillUnmount(){
+    console.log('inside un mount');
+    BookStoreInstance.removeListener('change', this.displayBooks);
+  }
+
+  displayBooks(){
+    this.setState({
+      newBook: '',
+      books: BookStoreInstance.getBooks()
+    });
   }
 
   addBook(){
