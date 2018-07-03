@@ -1,61 +1,54 @@
 import React, { Component } from "react";
 
+import ACTIONS_LIST from "../state-tool/actions";
+import BookStoreInstance from "../state-tool/book-store";
+
 class Books extends Component {
+
   constructor() {
 
     super();
-    
+
     this.state = {
       newBook : '',
-      books : [{
-          id: '1',
-          name: 'book1'
-        },
-        {
-          id: '2',
-          name: 'book2'
-        },
-        {
-          id: '3',
-          name: 'book3'
-        }
-    ]};
+      books : BookStoreInstance.getBooks()
+    };
 
     this.addBook = this.addBook.bind(this);
     this.handleBookInputChange = this.handleBookInputChange.bind(this);
     this.deleteBook = this.deleteBook.bind(this);
   }
-  addBook(){
-  
-    if(this.state.newBook){
-      let books = this.state.books;
-      books.push({
-        id: Date.now(),
-        name: this.state.newBook
-      });
+
+  componentDidMount(){
+    BookStoreInstance.on('change', () => {
       this.setState({
-        books: books
+        newBook: '',
+        books: BookStoreInstance.getBooks()
       });
-      this.state.newBook = '';
-    }    
+    })
   }
+
+  addBook(){
+
+    if (this.state.newBook) {
+      ACTIONS_LIST.CREATE_BOOK(this.state.newBook);
+    }
+  }
+
   handleBookInputChange(event){
     
     this.setState({
       newBook: event.target.value
     });
   }
+
   deleteBook(bookId){
-    console.log(bookId);
+    
     if(bookId){
-      let books = this.state.books;
-      this.setState({
-        books: books.filter(function (item) {
-          return item.id!=bookId
-        })
-      });
+      ACTIONS_LIST.DELETE_BOOK(bookId);
     }
   }
+
   render() {
     let booksDisplay = [];
     let bookCount = 1;
