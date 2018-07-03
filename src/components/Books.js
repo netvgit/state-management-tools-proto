@@ -58,9 +58,10 @@ class Books extends Component {
   }
   render() {
     let booksDisplay = [];
+    let bookCount = 1;
     this.state.books.forEach(book => {
       let bookDiv = 
-        <div>
+        <div key={ bookCount }>
           <div style={{ float: "left", width: "20%" }}>{ book.id }</div>
           <div style={{ float: "left", width: "60%" }}>{book.name}</div>
           <div style={{ float: "left", width: "20%" }}>
@@ -69,6 +70,7 @@ class Books extends Component {
             } />
           </div>
         </div>;
+      bookCount++;  
       booksDisplay.push(bookDiv);
     });
     return (
