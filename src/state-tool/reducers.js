@@ -13,19 +13,26 @@ function books(state =[{
     name: 'book3'
   }], 
   action){
-
+  
+  let newState = [];
+  
   switch(action.type){
  
     case 'CREATE_BOOK':
     break;
  
     case 'DELETE_BOOK':
+      
+      newState = state.filter(function(item){
+        return item.id!=action.payload.id;
+      });
+      
+      return newState;
     break;
  
     default:
       return state;
   }
-
   return state;
 }
 

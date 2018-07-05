@@ -27327,6 +27327,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
+var _actions = __webpack_require__(/*! ../state-tool/actions */ "./src/state-tool/actions.js");
+
+var _actions2 = _interopRequireDefault(_actions);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27334,6 +27338,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var BookRow = function BookRow(props) {
+  return _react2.default.createElement(
+    'div',
+    null,
+    _react2.default.createElement(
+      'div',
+      { style: { float: "left", width: "20%" } },
+      props.bookId
+    ),
+    _react2.default.createElement(
+      'div',
+      { style: { float: "left", width: "60%" } },
+      props.bookName
+    ),
+    _react2.default.createElement(
+      'div',
+      { style: { float: "left", width: "20%" } },
+      _react2.default.createElement('input', { type: 'button', value: 'Delete', onClick: function onClick() {
+          return props.deleteBook(props.bookId);
+        } })
+    )
+  );
+};
 
 var Books = function (_Component) {
   _inherits(Books, _Component);
@@ -27345,12 +27373,33 @@ var Books = function (_Component) {
   }
 
   _createClass(Books, [{
-    key: "render",
+    key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var booksDisplay = [];
+      var bookCount = 1;
+      this.props.books.forEach(function (book) {
+        var bookEle = _react2.default.createElement(BookRow, {
+          key: bookCount,
+          bookId: book.id,
+          bookName: book.name,
+          deleteBook: function deleteBook(bookId) {
+            console.log('inside delete book with book id = ' + bookId);
+            _this2.props.deleteBook(bookId);
+          } });
+        bookCount++;
+        booksDisplay.push(bookEle);
+      });
       return _react2.default.createElement(
-        "div",
-        null,
-        "Books Component"
+        'div',
+        { className: 'main-div' },
+        _react2.default.createElement(
+          'h1',
+          null,
+          'List of Books'
+        ),
+        booksDisplay
       );
     }
   }]);
@@ -27358,7 +27407,17 @@ var Books = function (_Component) {
   return Books;
 }(_react.Component);
 
-exports.default = (0, _reactRedux.connect)(null, null)(Books);
+exports.default = (0, _reactRedux.connect)(function (state) {
+  return {
+    books: state.books
+  };
+}, function (dispatch) {
+  return {
+    deleteBook: function deleteBook(bookId) {
+      dispatch(_actions2.default.DELETE_BOOK(bookId));
+    }
+  };
+})(Books);
 
 /***/ }),
 
@@ -27550,6 +27609,58 @@ _reactDom2.default.render(_react2.default.createElement(
 
 /***/ }),
 
+/***/ "./src/state-tool/actions.js":
+/*!***********************************!*\
+  !*** ./src/state-tool/actions.js ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function createBook(bookName) {
+  return {
+    type: 'CREATE_BOOK',
+    payload: {
+      id: Date.now(),
+      name: bookName
+    }
+  };
+}
+
+function deleteBook(bookId) {
+  console.log('inside action for delete book with book Id = ' + bookId);
+  return {
+    type: 'DELETE_BOOK',
+    payload: {
+      id: bookId
+    }
+  };
+}
+
+function updateNewBook(newBookValue) {
+  return {
+    type: 'UPDATE_NEW_BOOK',
+    payload: {
+      newBookValue: newBookValue
+    }
+  };
+}
+
+var ACTIONS_LIST = {
+  CREATE_BOOK: createBook,
+  DELETE_BOOK: deleteBook,
+  UPDATE_NEW_BOOK: updateNewBook
+};
+
+exports.default = ACTIONS_LIST;
+
+/***/ }),
+
 /***/ "./src/state-tool/reducers.js":
 /*!************************************!*\
   !*** ./src/state-tool/reducers.js ***!
@@ -27567,9 +27678,21 @@ Object.defineProperty(exports, "__esModule", {
 var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 
 function books() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [{
+    id: '1',
+    name: 'book1'
+  }, {
+    id: '2',
+    name: 'book2'
+  }, {
+    id: '3',
+    name: 'book3'
+  }];
   var action = arguments[1];
 
+
+  var newState = [];
+  console.log('inside reducer');
 
   switch (action.type) {
 
@@ -27577,12 +27700,18 @@ function books() {
       break;
 
     case 'DELETE_BOOK':
+      console.log('inside reducer delete book');
+      newState = state.filter(function (item) {
+        return item.id != action.id;
+      });
+      console.log('new state');
+      console.log(newState);
+      return newState;
       break;
 
     default:
       return state;
   }
-
   return state;
 }
 
@@ -27633,6 +27762,10 @@ exports.default = combinedReducers;
 "use strict";
 
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
 var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 
 var _reducers = __webpack_require__(/*! ./reducers */ "./src/state-tool/reducers.js");
@@ -27642,6 +27775,8 @@ var _reducers2 = _interopRequireDefault(_reducers);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var store = (0, _redux.createStore)(_reducers2.default);
+
+exports.default = store;
 
 /***/ })
 

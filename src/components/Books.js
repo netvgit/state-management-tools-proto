@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
+import ACTIONS_LIST from '../state-tool/actions';
+
 const BookRow = (props) => {
   return (
     <div>
@@ -27,8 +29,8 @@ class Books extends Component{
         key={ bookCount } 
         bookId={ book.id } 
         bookName={ book.name }
-        deleteBook={ () => {
-          console.log('inside delete book with book id = '+book.id);
+        deleteBook={ (bookId) => {
+          this.props.deleteBook(bookId);
         }} />
       bookCount++;
       booksDisplay.push(bookEle);
@@ -48,6 +50,10 @@ export default connect(
       books: state.books
     };
   }, 
-  () => {
-    return {};
+  (dispatch) => {
+    return {
+      deleteBook: (bookId) => {
+        dispatch(ACTIONS_LIST.DELETE_BOOK(bookId))
+      }
+    };
 })(Books);
