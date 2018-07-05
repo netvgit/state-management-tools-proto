@@ -27325,6 +27325,8 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27339,113 +27341,16 @@ var Books = function (_Component) {
   function Books() {
     _classCallCheck(this, Books);
 
-    var _this = _possibleConstructorReturn(this, (Books.__proto__ || Object.getPrototypeOf(Books)).call(this));
-
-    _this.state = {
-      newBook: '',
-      books: [{
-        id: '1',
-        name: 'book1'
-      }, {
-        id: '2',
-        name: 'book2'
-      }, {
-        id: '3',
-        name: 'book3'
-      }] };
-
-    _this.addBook = _this.addBook.bind(_this);
-    _this.handleBookInputChange = _this.handleBookInputChange.bind(_this);
-    _this.deleteBook = _this.deleteBook.bind(_this);
-    return _this;
+    return _possibleConstructorReturn(this, (Books.__proto__ || Object.getPrototypeOf(Books)).call(this));
   }
 
   _createClass(Books, [{
-    key: 'addBook',
-    value: function addBook() {
-
-      if (this.state.newBook) {
-        var books = this.state.books;
-        books.push({
-          id: Date.now(),
-          name: this.state.newBook
-        });
-        this.setState({
-          books: books
-        });
-        this.state.newBook = '';
-      }
-    }
-  }, {
-    key: 'handleBookInputChange',
-    value: function handleBookInputChange(event) {
-
-      this.setState({
-        newBook: event.target.value
-      });
-    }
-  }, {
-    key: 'deleteBook',
-    value: function deleteBook(bookId) {
-      console.log(bookId);
-      if (bookId) {
-        var books = this.state.books;
-        this.setState({
-          books: books.filter(function (item) {
-            return item.id != bookId;
-          })
-        });
-      }
-    }
-  }, {
-    key: 'render',
+    key: "render",
     value: function render() {
-      var _this2 = this;
-
-      var booksDisplay = [];
-      var bookCount = 1;
-      this.state.books.forEach(function (book) {
-        var bookDiv = _react2.default.createElement(
-          'div',
-          { key: bookCount },
-          _react2.default.createElement(
-            'div',
-            { style: { float: "left", width: "20%" } },
-            book.id
-          ),
-          _react2.default.createElement(
-            'div',
-            { style: { float: "left", width: "60%" } },
-            book.name
-          ),
-          _react2.default.createElement(
-            'div',
-            { style: { float: "left", width: "20%" } },
-            _react2.default.createElement('input', { type: 'button', value: 'Delete', onClick: function onClick() {
-                return _this2.deleteBook(book.id);
-              } })
-          )
-        );
-        bookCount++;
-        booksDisplay.push(bookDiv);
-      });
       return _react2.default.createElement(
-        'div',
-        { className: 'main-div' },
-        _react2.default.createElement(
-          'h1',
-          null,
-          'List of Books'
-        ),
-        booksDisplay,
-        _react2.default.createElement(
-          'div',
-          null,
-          'Add:\xA0\xA0',
-          _react2.default.createElement('input', { type: 'text', value: this.state.newBook, onChange: this.handleBookInputChange }),
-          '\xA0\xA0',
-          _react2.default.createElement('input', { type: 'button', value: 'Add', onClick: this.addBook })
-        )
+        "div",
+        null,
+        "Books Component"
       );
     }
   }]);
@@ -27453,7 +27358,7 @@ var Books = function (_Component) {
   return Books;
 }(_react.Component);
 
-exports.default = Books;
+exports.default = (0, _reactRedux.connect)(null, null)(Books);
 
 /***/ }),
 
@@ -27471,43 +27376,28 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var HomeContent = function HomeContent(props) {
+  return _react2.default.createElement(
+    "div",
+    null,
+    props.homePageContent
+  );
+};
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Home = function (_Component) {
-  _inherits(Home, _Component);
-
-  function Home() {
-    _classCallCheck(this, Home);
-
-    return _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).apply(this, arguments));
-  }
-
-  _createClass(Home, [{
-    key: "render",
-    value: function render() {
-      return _react2.default.createElement(
-        "div",
-        null,
-        "Content Home"
-      );
-    }
-  }]);
-
-  return Home;
-}(_react.Component);
-
+var Home = function Home() {
+  return _react2.default.createElement(
+    "div",
+    null,
+    "Content Home As Arrow function",
+    _react2.default.createElement(HomeContent, { homePageContent: "Getting displayed from the child component" })
+  );
+};
 exports.default = Home;
 
 /***/ }),
@@ -27676,7 +27566,10 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 
-function books(state, action) {
+function books() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
 
   switch (action.type) {
 
@@ -27689,9 +27582,21 @@ function books(state, action) {
     default:
       return state;
   }
+
+  return state;
 }
 
-function users(state, action) {
+function newBook() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  var action = arguments[1];
+
+  return state;
+}
+
+function users() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+  var action = arguments[1];
+
 
   switch (action.type) {
 
@@ -27704,9 +27609,12 @@ function users(state, action) {
     default:
       return state;
   }
+
+  return state;
 }
 
 var combinedReducers = (0, _redux.combineReducers)({
+  newBook: newBook,
   books: books,
   users: users
 });

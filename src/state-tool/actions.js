@@ -17,9 +17,19 @@ function deleteBook(bookId) {
   };
 }
 
+function updateNewBook(newBookValue){
+  return {
+    type: 'UPDATE_NEW_BOOK',
+    payload: {
+      newBookValue: newBookValue
+    }
+  };
+}
+
 let ACTIONS_LIST = {
   CREATE_BOOK: createBook,
-  DELETE_BOOK: deleteBook
+  DELETE_BOOK: deleteBook,
+  UPDATE_NEW_BOOK: updateNewBook
 };
 
 export default ACTIONS_LIST;

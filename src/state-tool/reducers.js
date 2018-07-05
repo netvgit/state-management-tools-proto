@@ -1,6 +1,18 @@
 import { combineReducers } from 'redux';
 
-function books(state=[], action){
+function books(state =[{
+    id: '1',
+    name: 'book1'
+  },
+  {
+    id: '2',
+    name: 'book2'
+  },
+  {
+    id: '3',
+    name: 'book3'
+  }], 
+  action){
 
   switch(action.type){
  
@@ -14,6 +26,10 @@ function books(state=[], action){
       return state;
   }
 
+  return state;
+}
+
+function newBook(state='', action){
   return state;
 }
 
@@ -35,6 +51,7 @@ function users(state=[], action){
 }
 
 const combinedReducers = combineReducers({
+  newBook,
   books,
   users
 });
