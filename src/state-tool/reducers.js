@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import store from './store';
 
 function books(state =[{
     id: '1',
@@ -19,6 +20,19 @@ function books(state =[{
   switch(action.type){
  
     case 'CREATE_BOOK':
+      
+      let bookData = action.payload;
+      if (bookData.name) {
+        newState = [
+          ...state,
+          {
+            id: Date.now(),
+            name: bookData.name
+          }
+        ];
+        //this.state.newBook = '';
+      } 
+      return newState;
     break;
  
     case 'DELETE_BOOK':
@@ -37,6 +51,14 @@ function books(state =[{
 }
 
 function newBook(state='', action){
+  let newState = '';
+  switch(action.type){
+
+    case 'INPUT_BOOK_CHANGE':
+      newState = action.payload.newBookValue;
+      return newState;
+    break;
+  }
   return state;
 }
 

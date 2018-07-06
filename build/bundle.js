@@ -27327,6 +27327,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 
+var _store = __webpack_require__(/*! ../state-tool/store */ "./src/state-tool/store.js");
+
+var _store2 = _interopRequireDefault(_store);
+
 var _actions = __webpack_require__(/*! ../state-tool/actions */ "./src/state-tool/actions.js");
 
 var _actions2 = _interopRequireDefault(_actions);
@@ -27363,6 +27367,17 @@ var BookRow = function BookRow(props) {
   );
 };
 
+var InputRow = function InputRow(props) {
+  return _react2.default.createElement(
+    'div',
+    null,
+    'Add:\xA0\xA0',
+    _react2.default.createElement('input', { type: 'text', value: props.newBook, onChange: props.inputBookChange }),
+    '\xA0\xA0',
+    _react2.default.createElement('input', { type: 'button', value: 'Add', onClick: props.createBook })
+  );
+};
+
 var Books = function (_Component) {
   _inherits(Books, _Component);
 
@@ -27385,7 +27400,6 @@ var Books = function (_Component) {
           bookId: book.id,
           bookName: book.name,
           deleteBook: function deleteBook(bookId) {
-            console.log('inside delete book with book id = ' + bookId);
             _this2.props.deleteBook(bookId);
           } });
         bookCount++;
@@ -27399,7 +27413,11 @@ var Books = function (_Component) {
           null,
           'List of Books'
         ),
-        booksDisplay
+        booksDisplay,
+        _react2.default.createElement(InputRow, {
+          newBookValue: this.props.newBook,
+          inputBookChange: this.props.inputBookChange,
+          createBook: this.props.createBook })
       );
     }
   }]);
@@ -27409,12 +27427,19 @@ var Books = function (_Component) {
 
 exports.default = (0, _reactRedux.connect)(function (state) {
   return {
-    books: state.books
+    books: state.books,
+    newBook: state.newBook
   };
 }, function (dispatch) {
   return {
     deleteBook: function deleteBook(bookId) {
       dispatch(_actions2.default.DELETE_BOOK(bookId));
+    },
+    inputBookChange: function inputBookChange(newBookValue) {
+      dispatch(_actions2.default.inputBookChange(newBookValue));
+    },
+    createBook: function createBook(bookName) {
+      dispatch(_actions2.default.createBook(bookName));
     }
   };
 })(Books);
@@ -27633,7 +27658,6 @@ function createBook(bookName) {
 }
 
 function deleteBook(bookId) {
-  console.log('inside action for delete book with book Id = ' + bookId);
   return {
     type: 'DELETE_BOOK',
     payload: {
@@ -27642,9 +27666,9 @@ function deleteBook(bookId) {
   };
 }
 
-function updateNewBook(newBookValue) {
+function inputBookChange(newBookValue) {
   return {
-    type: 'UPDATE_NEW_BOOK',
+    type: 'INPUT_BOOK_CHANGE',
     payload: {
       newBookValue: newBookValue
     }
@@ -27654,7 +27678,7 @@ function updateNewBook(newBookValue) {
 var ACTIONS_LIST = {
   CREATE_BOOK: createBook,
   DELETE_BOOK: deleteBook,
-  UPDATE_NEW_BOOK: updateNewBook
+  INPUT_BOOK_CHANGE: inputBookChange
 };
 
 exports.default = ACTIONS_LIST;
@@ -27692,7 +27716,6 @@ function books() {
 
 
   var newState = [];
-  console.log('inside reducer');
 
   switch (action.type) {
 
@@ -27700,12 +27723,11 @@ function books() {
       break;
 
     case 'DELETE_BOOK':
-      console.log('inside reducer delete book');
+
       newState = state.filter(function (item) {
-        return item.id != action.id;
+        return item.id != action.payload.id;
       });
-      console.log('new state');
-      console.log(newState);
+
       return newState;
       break;
 
@@ -27719,6 +27741,14 @@ function newBook() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   var action = arguments[1];
 
+  var newState = '';
+  switch (action.type) {
+
+    case 'INPUT_BOOK_CHANGE':
+      newState = action.payload.newBookValue;
+      return newState;
+      break;
+  }
   return state;
 }
 

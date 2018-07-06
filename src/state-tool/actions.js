@@ -17,9 +17,10 @@ function deleteBook(bookId) {
   };
 }
 
-function updateNewBook(newBookValue){
+function inputBookChange(newBookValue){
+  
   return {
-    type: 'UPDATE_NEW_BOOK',
+    type: 'INPUT_BOOK_CHANGE',
     payload: {
       newBookValue: newBookValue
     }
@@ -29,7 +30,7 @@ function updateNewBook(newBookValue){
 let ACTIONS_LIST = {
   CREATE_BOOK: createBook,
   DELETE_BOOK: deleteBook,
-  UPDATE_NEW_BOOK: updateNewBook
+  INPUT_BOOK_CHANGE: inputBookChange
 };
 
 export default ACTIONS_LIST;

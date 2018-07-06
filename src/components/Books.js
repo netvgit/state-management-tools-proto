@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
+import store from '../state-tool/store';
 import ACTIONS_LIST from '../state-tool/actions';
 
 const BookRow = (props) => {
@@ -17,11 +18,23 @@ const BookRow = (props) => {
   )
 }
 
+const InputRow = (props) => {
+  return (
+    <div>
+      Add:&nbsp;&nbsp;<input type='text' value={ props.newBookValue } onChange={ (e) => props.inputBookChange(e.target.value) } />&nbsp;&nbsp;<input type="button" value="Add" onClick={ () => props.createBook(props.newBookValue) } />
+    </div>
+  )
+}
+
 class Books extends Component{
+  
   constructor(){
+    
     super();
   }
+  
   render(){
+    
     let booksDisplay = [];
     let bookCount = 1;
     this.props.books.forEach(book => {
@@ -39,7 +52,11 @@ class Books extends Component{
       <div className='main-div'>
         <h1>List of Books</h1>
         { booksDisplay }
-      </div>
+        <InputRow 
+        newBookValue={ this.props.newBook }
+        inputBookChange={ this.props.inputBookChange }
+        createBook={ this.props.createBook } />
+      </div>      
     );
   }
 }
@@ -47,13 +64,21 @@ class Books extends Component{
 export default connect(
   (state)=>{
     return {
-      books: state.books
+      books: state.books,
+      newBook: state.newBook
     };
   }, 
   (dispatch) => {
     return {
       deleteBook: (bookId) => {
         dispatch(ACTIONS_LIST.DELETE_BOOK(bookId))
+      },
+      inputBookChange: (newBookValue) => {
+        dispatch(ACTIONS_LIST.INPUT_BOOK_CHANGE(newBookValue))
+      },
+      createBook: (bookName) => {
+        dispatch(ACTIONS_LIST.CREATE_BOOK(bookName));
+        dispatch(ACTIONS_LIST.INPUT_BOOK_CHANGE(''));
       }
     };
 })(Books);
