@@ -8,7 +8,10 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
-        options: { presets: ['env', 'react'] }
+        options: { 
+          presets: ['env', 'react'],
+          plugins: ['transform-decorators-legacy', 'transform-class-properties']
+        }
       },
       {
         test: /\.css$/,

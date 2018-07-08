@@ -98,7 +98,7 @@ exports = module.exports = __webpack_require__(/*! ../node_modules/css-loader/li
 
 
 // module
-exports.push([module.i, "body{\n  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n}", ""]);
+exports.push([module.i, "body{\n  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;\n}\n\ndiv.main-div div{\n  margin: 10px 0px;\n}", ""]);
 
 // exports
 
@@ -25106,12 +25106,26 @@ var Books = function (_Component) {
 
     _this.addBook = _this.addBook.bind(_this);
     _this.handleBookInputChange = _this.handleBookInputChange.bind(_this);
+    _this.deleteBook = _this.deleteBook.bind(_this);
     return _this;
   }
 
   _createClass(Books, [{
     key: 'addBook',
-    value: function addBook() {}
+    value: function addBook() {
+
+      if (this.state.newBook) {
+        var books = this.state.books;
+        books.push({
+          id: Date.now(),
+          name: this.state.newBook
+        });
+        this.setState({
+          books: books
+        });
+        this.state.newBook = '';
+      }
+    }
   }, {
     key: 'handleBookInputChange',
     value: function handleBookInputChange(event) {
@@ -25121,13 +25135,29 @@ var Books = function (_Component) {
       });
     }
   }, {
+    key: 'deleteBook',
+    value: function deleteBook(bookId) {
+      console.log(bookId);
+      if (bookId) {
+        var books = this.state.books;
+        this.setState({
+          books: books.filter(function (item) {
+            return item.id != bookId;
+          })
+        });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var booksDisplay = [];
+      var bookCount = 1;
       this.state.books.forEach(function (book) {
         var bookDiv = _react2.default.createElement(
           'div',
-          null,
+          { key: bookCount },
           _react2.default.createElement(
             'div',
             { style: { float: "left", width: "20%" } },
@@ -25135,15 +25165,23 @@ var Books = function (_Component) {
           ),
           _react2.default.createElement(
             'div',
-            null,
+            { style: { float: "left", width: "60%" } },
             book.name
+          ),
+          _react2.default.createElement(
+            'div',
+            { style: { float: "left", width: "20%" } },
+            _react2.default.createElement('input', { type: 'button', value: 'Delete', onClick: function onClick() {
+                return _this2.deleteBook(book.id);
+              } })
           )
         );
+        bookCount++;
         booksDisplay.push(bookDiv);
       });
       return _react2.default.createElement(
         'div',
-        null,
+        { className: 'main-div' },
         _react2.default.createElement(
           'h1',
           null,
